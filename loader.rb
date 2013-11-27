@@ -1,12 +1,30 @@
 @@filename = ARGV[0]
 @@modelname = ARGV[1]
-@@Database = 'NRT-dev'
-
+@@Database = ARGV[2]
+@@Tablename = ARGV[3]
 
 # Uses shell to create the database
 #
-def databaseGen()
+def databaseGen
   stt = "echo \"CREATE DATABASE #{@@Database}\" | mysql -u root"
+  puts stt
+  `#{stt}`
+end
+
+def tableGen
+  first_frag = "echo \"CREATE TABLE #{@@Tablename} (" 
+  second_frag = ")\" | mysql -u root #{@@Database}"
+  # column name TEXT, 
+  headers = headerFetcher(@@filename)
+  limit = headers.count
+  headers.each_with_index do |h, i|
+    if i == limit -1
+      first_frag += h + " TEXT"
+    else
+      first_frag += h + " TEXT,"
+    end
+  end
+  stt = first_frag + second_frag
   puts stt
   `#{stt}`
 end
@@ -39,10 +57,6 @@ def modelGen(modelname)
   puts result
 end
 
-def tableGen
-  
-end
-
 # Load products
 def loadProducts
   tablename = @@modelname.downcase + 's'
@@ -67,4 +81,6 @@ end
 # ruby loader.rb nicotine_products.tsv Product
 #modelGen(@@modelname)
 #loadProducts
-headerFetcher(@@filename)
+#headerFetcher(@@filename)
+#databaseGen
+tableGen
