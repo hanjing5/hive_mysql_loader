@@ -1,7 +1,18 @@
-@@filename = ARGV[0]
-@@modelname = ARGV[1]
-@@Database = ARGV[2]
-@@Tablename = ARGV[3]
+require 'trollop'
+opts = Trollop::options do
+  opt :database, "Database Name", :type => :string                    # flag --monkey, default false
+  opt :table, "Table Name", :type => :string        # string --name <s>, default nil
+  opt :file, "File Name", :type => :string        # string --name <s>, default nil
+  opt :model, "Model Name", :type => :string        # string --name <s>, default nil
+  opt :verbose, "Verbose Mode"
+end
+
+p opts # a hash: { :monkey=>false, :name=>nil, :num_limbs=>4, :help=>false }
+
+@@filename = opts[:file]
+@@modelname = opts[:model]
+@@Database = opts[:database]
+@@Tablename = opts[:table]
 
 # Uses shell to create the database
 #
@@ -34,7 +45,7 @@ end
 # * *Args*    :
 #   - ++ ->
 # * *Returns* :
-#   -
+#   - Array of header strings
 # * *Raises* :
 #   - ++ ->
 #
@@ -59,8 +70,8 @@ end
 
 # Load products
 def loadProducts
-  tablename = @@modelname.downcase + 's'
-  puts tablename
+  tablename = @@Tablename
+  puts "Loading #{@@filename} into #{@@Tablename}..."
   headers =  headerFetcher(@@filename)
   column_names = headers.join(",")
   f = File.open(@@filename)
@@ -83,4 +94,5 @@ end
 #loadProducts
 #headerFetcher(@@filename)
 #databaseGen
-tableGen
+#tableGen
+#loadProducts
