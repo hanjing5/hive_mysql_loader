@@ -2,6 +2,24 @@
 @@modelname = ARGV[1]
 @@Database = 'NRT-dev'
 
+
+# Uses shell to create the database
+#
+def databaseGen()
+  stt = "echo \"CREATE DATABASE #{@@Database}\" | mysql -u root"
+  puts stt
+  `#{stt}`
+end
+
+#
+#
+# * *Args*    :
+#   - ++ ->
+# * *Returns* :
+#   -
+# * *Raises* :
+#   - ++ ->
+#
 def headerFetcher(filename)
   headers = []
   f = File.open(filename,'r')
@@ -9,9 +27,6 @@ def headerFetcher(filename)
     break if i > 0
     headers = l.split("\t")
     headers[-1] = headers[-1][0..-2]
-    print headers
-    puts
-
   end
   f.close
   return headers
@@ -22,6 +37,10 @@ def modelGen(modelname)
   result = headers.join(":text ")
   result = "rails g model #{modelname} #{result}:text"
   puts result
+end
+
+def tableGen
+  
 end
 
 # Load products
@@ -46,6 +65,6 @@ def loadProducts
 end
 
 # ruby loader.rb nicotine_products.tsv Product
-modelGen(@@modelname)
-loadProducts
-
+#modelGen(@@modelname)
+#loadProducts
+headerFetcher(@@filename)
