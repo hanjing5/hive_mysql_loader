@@ -1,1 +1,1 @@
-hive .tsv file to mysql simple loaders
+Simple ruby script to mirror .tsv outputs from Hive to Mysql Tables
