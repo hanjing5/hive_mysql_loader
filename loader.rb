@@ -93,6 +93,6 @@ end
 #modelGen(@@modelname)
 #loadProducts
 #headerFetcher(@@filename)
-#databaseGen
-#tableGen
-#loadProducts
+databaseGen
+tableGen
+loadProducts
