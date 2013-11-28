@@ -6,6 +6,7 @@ class LoaderHelper
     @Database = database
     @Tablename = tablename
     @Username = username
+    puts "Username: #{@Username}"
     @Password = password
     @dryrun = dryrun
   end
@@ -14,7 +15,7 @@ class LoaderHelper
   def databaseGen
     stt = "echo \"CREATE DATABASE #{@Database}\" | mysql -u #{@Username}"
     puts stt
-    #`#{stt}` if not @dryrun
+    `#{stt}` if not @dryrun
   end
 
   def tableGen
@@ -32,13 +33,13 @@ class LoaderHelper
     end
     stt = first_frag + second_frag
     puts stt
-    #`#{stt}` if not @dryrun
+    `#{stt}` if not @dryrun
   end
 
   #
   #
   # * *Args*    :
-  #   - ++ ->
+  #   - +filename -> name+path of a file
   # * *Returns* :
   #   - Array of header strings
   # * *Raises* :
@@ -77,11 +78,11 @@ class LoaderHelper
     f.close
     o.close
     cmd_list = []
-    cmd_list << "mysqlimport --columns='#{column_names}' --ignore-lines=1 --fields-terminated-by='\t' --local -u root -p #{@Database} #{tablename}.csv"
+    cmd_list << "mysqlimport --columns='#{column_names}' --ignore-lines=1 --fields-terminated-by='\t' --local -u #{@Username} -p #{@Database} #{tablename}.csv"
     cmd_list << "rm #{tablename}.csv"
     cmd_list.each do |c|
       puts c
-      #`#{c}` if not @dryrun
+      `#{c}` if not @dryrun
     end
   end
 end
